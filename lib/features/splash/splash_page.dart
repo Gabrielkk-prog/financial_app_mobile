@@ -5,7 +5,9 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -13,8 +15,12 @@ class SplashPage extends StatelessWidget {
           colors: [ 
           Color(0xFF63B5AF),   // the first two digits are for transparency
           Color(0xFF438883),
-          ]) 
-      ) 
-    );
+          ],
+        ), 
+      ), 
+        child: Text('financy', style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w700, color: Color(0xFFFFFFFF) ),
+      ),
+    )
+   );
   }
 }

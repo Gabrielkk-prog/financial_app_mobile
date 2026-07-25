@@ -1,8 +1,8 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'features/Splash/splash_page.dart';
 
-import 'device_preview.dart';
 
 void main() {
   runApp(
@@ -11,4 +11,15 @@ void main() {
       builder: (context) => const MyApp(),
     ),
   );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: SplashPage(),
+    );
+  }
 }
