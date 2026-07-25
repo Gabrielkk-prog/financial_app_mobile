@@ -6,21 +6,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Financial App Preview',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text(
-            'Tela pronta para preview de smartphone',
-            style: TextStyle(fontSize: 18),
-          ),
-        ),
-      ),
+    home: Scaffold(
+      body: Center(
+        child: Text('Home'),
+    ),  
+    ),
     );
   }
-}
-
+ }
