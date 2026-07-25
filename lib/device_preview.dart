@@ -6,11 +6,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    home: Scaffold(
-      body: Center(
-        child: Text('Home'),
-    ),  
-    ),
+      home: SplashPage(),
     );
   }
- }
+}
+
+class SplashPage extends StatelessWidget {
+  const SplashPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text('financy'),
+      ),
+    );
+  }
+}
