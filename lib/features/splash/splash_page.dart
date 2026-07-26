@@ -1,4 +1,4 @@
-import 'package:financial_app_project/commom/constants/app_collors.dart';
+import 'package:financial_app_project/commom/constants/app_colors.dart';
 import 'package:financial_app_project/commom/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class SplashPage extends StatelessWidget {
       ), 
         child: Text(
           'financy',
-          style: AppTextStyles.bigText.copyWith(
+          style: AppTextStyles.mediumText.copyWith(
             color: AppColors.white,
           ),
         ),
