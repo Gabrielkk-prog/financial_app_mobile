@@ -1,3 +1,5 @@
+import 'package:financial_app_project/commom/constants/app_collors.dart';
+import 'package:financial_app_project/commom/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatelessWidget {
@@ -13,14 +15,19 @@ class SplashPage extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [ 
-          Color(0xFF63B5AF),   // the first two digits are for transparency
-          Color(0xFF438883),
+            AppColors.greenlightOne,
+            AppColors.greenlightTwo,    // the first two digits are for transparency
+            
           ],
         ), 
       ), 
-        child: Text('financy', style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w700, color: Color(0xFFFFFFFF) ),
+        child: Text(
+          'financy',
+          style: AppTextStyles.bigText.copyWith(
+            color: AppColors.white,
+          ),
+        ),
       ),
-    )
-   );
+    );
   }
 }
