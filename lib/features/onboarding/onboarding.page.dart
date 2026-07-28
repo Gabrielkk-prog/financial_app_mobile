@@ -9,29 +9,34 @@ class OnboardingPage extends StatelessWidget {
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    body: Column(
-      children: [
-        const SizedBox(height: 60.0),
-        Expanded(
-          flex: 2,             // This container will take 2/3 of the available space
-         child: Container(
-           color: AppColors.iceWhite,
-           child: Image.asset('assets/images/man.png.png'),
+    body: Align(
+        child: Column(
+          children: [      // chlidren organize the widgets in a vertical layout by order of their appearance in the list
+            const SizedBox(height: 60.0),
+            Expanded(
+              flex: 2,             // This container will take 2/3 of the available space
+             child: Container(
+               color: AppColors.iceWhite,
+             child: Image.asset('assets/images/man.png.png'),
+          ),
         ),
-      ),
-          Text('Spend Smarter', style: AppTextStyles.mediumText.copyWith(
-            color: AppColors.greenlightTwo,
-          ),
-          ),
-          Text ('Save More', style: AppTextStyles.mediumText.copyWith(
-            color: AppColors.greenlightTwo,
-          )),
-          Expanded(
-            child: Container(
-              color: AppColors.white,
+            Text('Spend Smarter', style: AppTextStyles.mediumText.copyWith(
+              color: AppColors.greenlightTwo,
             ),
-          ),
-        ],
+            ),
+            Text ('Save More', style: AppTextStyles.mediumText.copyWith(
+              color: AppColors.greenlightTwo,
+            ),
+            ),
+            ElevatedButton(onPressed: (){}, child: Text ('Get Started'),
+            ),
+            Text ('Already have an account? Log In' , style: AppTextStyles.smallText.copyWith(
+              color: AppColors.grey,
+            ),
+            ),
+            const SizedBox(height: 40.0),
+            ],
+        ),
       ),
     );
   }

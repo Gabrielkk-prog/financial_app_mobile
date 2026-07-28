@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:financial_app_project/features/onboarding/onboarding.page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'features/Splash/splash_page.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SplashPage(),
+      home: OnboardingPage(),       // in this palce you can turnout the page you want to see 
     );
   }
 }

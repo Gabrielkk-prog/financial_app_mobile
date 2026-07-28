@@ -58,8 +58,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  To add assets to your application, add an assets section, like this:
+  #To add assets to your application, add an assets section, like this:
   assets:
+    - assets/fonts/
     - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -76,9 +77,9 @@ flutter:
   fonts:
     - family: inter 
       fonts:
-        - asset: assets/fonts/Inter-Regular.ttf
-        - asset: assets/fonts/Inter-Bold.ttf
-          weight: 700
+         - asset: assets/fonts/Roboto_Condensed-Regular.ttf
+         - asset: assets/fonts/Roboto_Condensed-Bold.ttf
+           weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
