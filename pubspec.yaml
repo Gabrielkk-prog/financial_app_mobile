@@ -75,11 +75,18 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: inter 
+    - family: Condensed
       fonts:
          - asset: assets/fonts/Roboto_Condensed-Regular.ttf
+           weight: 400
+         - asset: assets/fonts/Roboto_Condensed-Medium.ttf
+           weight: 500
          - asset: assets/fonts/Roboto_Condensed-Bold.ttf
-           weight: 700
+           weight: 600
+         - asset: assets/fonts/Roboto_Condensed-SemiBold.ttf
+           weight: 700 
+         - asset: assets/fonts/Roboto_Condensed-ExtraBold.ttf
+           weight: 800
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

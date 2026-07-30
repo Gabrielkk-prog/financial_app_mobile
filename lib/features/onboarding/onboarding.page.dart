@@ -28,16 +28,23 @@ Widget build(BuildContext context) {
               color: AppColors.greenlightTwo,
             ),
             ),
-            ElevatedButton(onPressed: (){}, child: Text ('Get Started'),
+            const SizedBox(height: 16.0), 
+            PrimaryButton(
+              text: 'Get Started',
+              onPressed: () {},       //turn on the grey color function 
             ),
-            Text ('Already have an account? Log In' , style: AppTextStyles.smallText.copyWith(
+            const SizedBox(height: 16.0),                   // Spacing Down
+            Text (
+              'Already have an account? Log In' , style: AppTextStyles.smallText.copyWith(
               color: AppColors.grey,
             ),
             ),
             const SizedBox(height: 40.0),
-            ],
-        ),
+          ]
+         )
       ),
     );
   }
 }
+
+
