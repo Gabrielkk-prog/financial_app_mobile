@@ -1,5 +1,6 @@
 //on this page I configure the onboading settings!
-import 'package:financial_app_project/commom/widgets/primary_button.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:financial_app_project/commom/constants/app_colors.dart';
 import 'package:financial_app_project/commom/constants/app_text_styles.dart';
@@ -28,28 +29,53 @@ Widget build(BuildContext context) {
               color: AppColors.greenlightTwo,
             ),
             ),
-            
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 32.0,
-                vertical: 16.0,
-                ),                   
-              child: PrimaryButton(
-                text: 'Get Started',
-                onPressed: () {},       //turn on the grey color function 
+
+            MultiTextButton(
+              onPressed: ()=> log('tap'),
+              children: [
+              Text(
+                'Already have account? ',
+                style: AppTextStyles.smallText.copyWith(
+                  color: AppColors.grey,
+                ),
               ),
+                Text(
+                  'Log In' ,
+                  style: AppTextStyles.smallText.copyWith(
+                    color: AppColors.greenlightTwo,
+                  ),
+              )
+            ],
             ),
-                        
-            Text (
-              'Already have an account? Log In' , style: AppTextStyles.smallText.copyWith(
-              color: AppColors.grey,
-            ),
-            ),
-            const SizedBox(height: 24.0),
-          ]
-         )
+            const SizedBox(
+              height: 24.0),
+          ],
+         ),
       ),
     );
+  }
+}
+
+class MultiTextButton extends StatelessWidget {
+  final List<Text> children;
+  final VoidCallback? onPressed;
+
+  const MultiTextButton({
+    super.key,
+    required this.children,
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+       child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center ,
+        children: children,
+           ),
+          );
   }
 }
 
