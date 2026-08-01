@@ -21,30 +21,32 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Ink(                           // I decided remove the material becouse the Ink already have this effect
-    height: 48.0,
-    decoration: BoxDecoration(
-        borderRadius: _borderRadius,
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors:
-             onPressed != null
-             ? AppColors.greenGradient
-             : AppColors.greyGradient,
+    return Material(  // this guy is Basically a pace of material 
+      child: Ink(                          
+      height: 48.0,
+      decoration: BoxDecoration(
+          borderRadius: _borderRadius,
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors:
+               onPressed != null
+               ? AppColors.greenGradient
+               : AppColors.greyGradient,
+            ),
+        ),         // Spacing UP
+           child: InkWell(
+       borderRadius: _borderRadius,
+       onTap: onPressed, 
+       child: Align(
+         child: Text (
+          text,
+           style: AppTextStyles.mediumText18.copyWith(
+            color: AppColors.white)
+                 ),
+       ),
+           ),
           ),
-      ),         // Spacing UP
-         child: InkWell(
-     borderRadius: _borderRadius,
-     onTap: onPressed, 
-     child: Align(
-       child: Text (
-        text,
-         style: AppTextStyles.mediumText18.copyWith(
-          color: AppColors.white)
-               ),
-     ),
-         ),
-        );
+    );
  }
 }

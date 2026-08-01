@@ -13,45 +13,47 @@ class OnboardingPage extends StatelessWidget {
 Widget build(BuildContext context) {
   return Scaffold(
     backgroundColor: AppColors.iceWhite,
-    body: Align(
-        child: Column(
-          children: [      // chlidren organize the widgets in a vertical layout by order of their appearance in the list
-            const SizedBox(height: 48.0),
-            Expanded(
-              flex: 2,             // This container will take 2/3 of the available space
-              child: Image.asset('assets/images/man.png.png'),
-            ),
-            Text('Spend Smarter', style: AppTextStyles.mediumText.copyWith(
-              color: AppColors.greenlightTwo,
-            ),
-            ),
-            Text ('Save More', style: AppTextStyles.mediumText.copyWith(
-              color: AppColors.greenlightTwo,
-            ),
-            ),
-
-            MultiTextButton(
-              onPressed: ()=> log('tap'),
-              children: [
-              Text(
-                'Already have account? ',
-                style: AppTextStyles.smallText.copyWith(
-                  color: AppColors.grey,
-                ),
-              ),
-                Text(
-                  'Log In' ,
-                  style: AppTextStyles.smallText.copyWith(
-                    color: AppColors.greenlightTwo,
-                  ),
-              )
-            ],
-            ),
-            const SizedBox(
-              height: 24.0),
-          ],
+    body: Column(  // ListView is a scrollable list of widgets arranged linearly   
+      children: [      // chlidren organize the widgets in a vertical layout by order of their appearance in the list
+        const SizedBox(height: 48.0),
+         Expanded(
+           child: Image.asset('assets/images/MyImage.png'
+           ),
          ),
-      ),
+        Text('Spend Smarter', 
+          textAlign: TextAlign.center,
+          style: AppTextStyles.mediumText.copyWith(
+            color: AppColors.greenlightTwo,
+        ),
+        ),
+        Text ('Save More',
+          textAlign: TextAlign.center,
+          style: AppTextStyles.mediumText.copyWith(
+            color: AppColors.greenlightTwo,
+        ),
+        ),
+    
+        MultiTextButton(
+          onPressed: ()=> log('tap'),
+          children: [
+          Text(
+            'Already have account? ',
+            style: AppTextStyles.smallText.copyWith(
+              color: AppColors.grey,
+            ),
+          ),
+            Text(
+              'Log In' ,
+              style: AppTextStyles.smallText.copyWith(
+                color: AppColors.greenlightTwo,
+              ),
+          )
+        ],
+        ),
+        const SizedBox(
+          height: 24.0),
+      ],
+     ),
     );
   }
 }
