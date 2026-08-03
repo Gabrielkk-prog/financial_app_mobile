@@ -22,4 +22,6 @@ class AppTextStyles {
 
         );
 
+  static var inputLabelText;
+
 }
