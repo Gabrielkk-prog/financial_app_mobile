@@ -22,6 +22,20 @@ class AppTextStyles {
 
         );
 
-  static var inputLabelText;
+  static const TextStyle inputLabelText = TextStyle (
+             fontFamily: 'Condensed',
+             fontSize: 14.0,
+             fontWeight: FontWeight.w500,
+        );
+         static const TextStyle inputHintText = TextStyle (
+             fontFamily: 'Condensed',
+             fontSize: 12.0,
+             fontWeight: FontWeight.w400,
+        );
+         static const TextStyle inputText = TextStyle (
+             fontFamily: 'Condensed',
+             fontSize: 14.0,
+             fontWeight: FontWeight.w500,
+        );
 
 }

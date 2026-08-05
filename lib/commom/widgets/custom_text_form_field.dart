@@ -1,6 +1,7 @@
 import 'package:financial_app_project/commom/constants/app_colors.dart';
 import 'package:financial_app_project/commom/constants/app_text_styles.dart';
-import 'package:flutter/material.dart' show BorderSide, TextFormField, TextInputAction, StatefulWidget, EdgeInsetsGeometry, TextCapitalization, TextEditingController, TextInputType;
+import 'package:flutter/material.dart' ;
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
@@ -11,9 +12,12 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType? keyboardType;
   final int? maxLength;
   final TextInputAction? textInputAction;
+  final Widget? suffixIcon;
+  final bool? obscureText;
+  final List<TextInputFormatter>? inputFormatters;
+  final FormFieldValidator<String>? validator;
 
-  const CustomTextFormField({
-    super.key, required 
+  const CustomTextFormField({super.key,
     this.padding,
     this.hintText,
     this.labelText,
@@ -22,6 +26,10 @@ class CustomTextFormField extends StatefulWidget {
     this.keyboardType,
     this.maxLength,
     this.textInputAction,
+    this.suffixIcon,
+    this.obscureText,
+    this.inputFormatters,
+    this.validator,
   });
 
   @override
@@ -43,12 +51,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         vertical: 12.0
         ),
       child: TextFormField(
+        validator: widget.validator,
+        style: AppTextStyles.inputText.copyWith(
+          color: AppColors.greenlightOne,
+        ),
+        inputFormatters: widget.inputFormatters,
+        obscureText: widget.obscureText ?? false,
         textInputAction: widget.textInputAction,
         maxLength: widget.maxLength,
         keyboardType: widget.keyboardType,
         controller: widget.controller,
         textCapitalization: widget.textCapitalization ?? TextCapitalization.none,
        decoration: InputDecoration(
+        suffixIcon: widget.suffixIcon,
         floatingLabelBehavior: FloatingLabelBehavior.always, // the text will always float above the text field
          hintText: widget.hintText ,
          labelText: widget.labelText?.toUpperCase(), // text that appears upon the text field when it is empty     
@@ -61,12 +76,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               color: AppColors.red,
           ),
           ),
-            focusedBorder: defaultBorder,
-          errorBorder: defaultBorder.copyWith(
-            borderSide: const BorderSide(
-              color: AppColors.red,
-          ),
-          ),
+
           enabledBorder: defaultBorder, 
            disabledBorder: defaultBorder, 
             
