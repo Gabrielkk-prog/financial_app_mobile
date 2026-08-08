@@ -56,11 +56,27 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+              
                     CustomTextFormField(
                       labelText: 'your name',
                       hintText: 'JOHN DOE',
                       textCapitalization: TextCapitalization.characters,
                       validator: (value) {
+                        if (value != null && value.isEmpty) {
+                          return "esse campo nao pode ser vazio";
+                        }
+                        print(value);
+                        return null;
+                      },
+                    ),
+                             CustomTextFormField(
+                      labelText: 'your email',
+                      hintText: 'john@gmail.com',
+                      textCapitalization: TextCapitalization.characters,
+                      validator: (value) {
+                        if (value != null && value.isEmpty) {
+                          return "esse campo nao pode ser vazio";
+                        }
                         print(value);
                         return null;
                       },
@@ -68,10 +84,28 @@ class _SignUpPageState extends State<SignUpPage> {
                     PasswordFormField(
                       labelText: "choose your password",
                       hintText: "********",
+                        validator: (value) {
+                        if (value != null && value.isEmpty) {
+                          return "esse campo nao pode ser vazio";
+                        }
+                        print(value);
+                        return null;
+                      },
+                      helperText: 
+                      "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.",
                     ),
                     PasswordFormField(
                       labelText: "confirm your password",
                       hintText: "********",
+                      validator: (value) {
+                        if (value != null && value.isEmpty) {
+                          return "esse campo nao pode ser vazio";
+                        }
+                        print(value);
+                        return null;
+                      },
+                      helperText: 
+                      "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.",
                     )
                   ],
                 ),
@@ -82,8 +116,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: PrimaryButton(
                   text: 'Sign Up',
                   onPressed: (){
-                   final valid = formKey.currentState?.validate(); 
-                   log(valid.toString());     
+                   final valid = formKey.currentState!= null && formKey.currentState!.validate(); 
+                   if(valid){
+                    log('Form is valid');
+                  }  
                   },
               ),
               ),

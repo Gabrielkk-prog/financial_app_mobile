@@ -4,8 +4,8 @@ import 'package:financial_app_project/features/sign_up/sign_up_page.dart';
 import 'package:financial_app_project/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:financial_app_project/features/onboarding/onboarding.page.dart';
-
 import '../../commom/themes/default_theme.dart';
+
 class AppWidget extends StatelessWidget {
   const AppWidget({super.key});
 
