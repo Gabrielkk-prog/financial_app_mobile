@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:financial_app_project/commom/constants/app_colors.dart';
 import 'package:financial_app_project/commom/widgets/custom_text_form_field.dart';
 
 class PasswordFormField extends StatefulWidget {
@@ -34,22 +35,23 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
   @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
-      helperText: widget.helperText,
       validator: widget.validator,
       controller: widget.controller,
       padding: widget.padding,
       hintText: widget.hintText,
       labelText: widget.labelText,
       obscureText: isHidden,
+      helperText: widget.helperText,
       suffixIcon: InkWell(
         borderRadius: BorderRadius.circular(23.0),
         onTap: () {
-            setState(() {
-                isHidden = !isHidden;   //recives the opposite value of isHidden, if it was true it will be false and vice versa
-            });
+          setState(() {
+            isHidden = !isHidden;
+          });
         },
         child: Icon(
           isHidden ? Icons.visibility : Icons.visibility_off,
+          color: AppColors.greenlightOne,
         ),
       ),
     );

@@ -5,6 +5,8 @@ import 'package:financial_app_project/commom/widgets/custom_text_form_field.dart
 import 'package:financial_app_project/commom/widgets/multi_text_button.dart';
 import 'package:financial_app_project/commom/widgets/password_form_field.dart';
 import 'package:financial_app_project/commom/widgets/primary_button.dart';
+import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
+import 'package:financial_app_project/features/sign_up/sign_up_stage.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -15,9 +17,72 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  
-    final  formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
+  final _controller = SignUpController();
+  bool _isLoadingDialogVisible = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onControllerStateChanged);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onControllerStateChanged);
+    _passwordController.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onControllerStateChanged() {
+    if (!mounted) return;
+
+    final state = _controller.state;
+
+    if (state is SignUpLoadingStage) {
+      _showLoadingDialog();
+      return;
+    }
+
+    if (_isLoadingDialogVisible) {
+      Navigator.of(context, rootNavigator: true).pop();
+      _isLoadingDialogVisible = false;
+    }
+
+    if (state is SignUpSuccessStage) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(
+              child: Text('nova Tela'),
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (state is SignUpErrorStage) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erro ao cadastrar, tente novamente.')),
+      );
+    }
+  }
+
+  void _showLoadingDialog() {
+    if (_isLoadingDialogVisible) return;
+
+    _isLoadingDialogVisible = true;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 24),
               Form(
-                key: formKey,
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -82,17 +147,17 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                     ),
                     PasswordFormField(
-                      labelText: "choose your password",
-                      hintText: "********",
-                        validator: (value) {
+                      labelText: 'choose your password',
+                      hintText: '********',
+                      helperText:
+                          'Password must be at least 8 characters, 1 capital letter and 1 number.',
+                      validator: (value) {
                         if (value != null && value.isEmpty) {
-                          return "esse campo nao pode ser vazio";
+                          return 'esse campo nao pode ser vazio';
                         }
                         print(value);
                         return null;
                       },
-                      helperText: 
-                      "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.",
                     ),
                     PasswordFormField(
                       labelText: "confirm your password",
@@ -104,8 +169,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         print(value);
                         return null;
                       },
-                      helperText: 
-                      "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.",
                     )
                   ],
                 ),
@@ -116,9 +179,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: PrimaryButton(
                   text: 'Sign Up',
                   onPressed: (){
-                   final valid = formKey.currentState!= null && formKey.currentState!.validate(); 
+                   final valid = _formKey.currentState!= null && _formKey.currentState!.validate(); 
                    if(valid){
-                    log('Form is valid');
+                    _controller.doSignUp();
+                   }else {
+                    log("erro ao logar");
                   }  
                   },
               ),
