@@ -66,13 +66,17 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         vertical: 12.0
         ),
       child: TextFormField(
-        onChanged: (value) {        //void means that the function does not return any value. thats really important.
+        onChanged: (value) {
+          // NOTA: A lógica de mostrar/esconder helperText aqui está OK, mas é bem específica.
+          // Considere se TODOS os campos precisam dessa lógica ou se é apenas para campos com helperText.
+          // Se helperText é null, esses setState() são desnecessários.
+          // SUGESTÃO: Adicione um check: if (widget.helperText != null) { setState(...) }
           if (value.length == 1) {
-            setState(() {           //when the user starts typing in the text field, the helper text will be removed.
+            setState(() {           
               _helpText = null;
             });
           } else if (value.isEmpty) {  
-            setState(() {           //when the user deletes all the text in the text field, the helper text will be displayed again.
+            setState(() {           
               _helpText = widget.helperText;
             });
           }
@@ -85,12 +89,17 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         obscureText: widget.obscureText ?? false,
         textInputAction: widget.textInputAction,
         maxLength: widget.maxLength,
-        keyboardType: widget.keyboardType,
+        maxLines: 1,
+        keyboardType: widget.keyboardType ?? TextInputType.text,
         controller: widget.controller,
         textCapitalization: widget.textCapitalization ?? TextCapitalization.none,
-        decoration: InputDecoration(
+        textAlignVertical: TextAlignVertical.center,
+      decoration: InputDecoration(
+       counterText: '',
         helperText:  _helpText,
         helperMaxLines: 3,
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
         suffixIcon: widget.suffixIcon,
         floatingLabelBehavior: FloatingLabelBehavior.always, // the text will always float above the text field
          hintText: widget.hintText ,
