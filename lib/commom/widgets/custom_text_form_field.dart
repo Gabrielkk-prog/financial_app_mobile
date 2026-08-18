@@ -67,10 +67,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         ),
       child: TextFormField(
         onChanged: (value) {
-          // NOTA: A lógica de mostrar/esconder helperText aqui está OK, mas é bem específica.
-          // Considere se TODOS os campos precisam dessa lógica ou se é apenas para campos com helperText.
-          // Se helperText é null, esses setState() são desnecessários.
-          // SUGESTÃO: Adicione um check: if (widget.helperText != null) { setState(...) }
           if (value.length == 1) {
             setState(() {           
               _helpText = null;
