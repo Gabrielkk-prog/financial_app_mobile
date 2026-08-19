@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:financial_app_project/commom/constants/app_colors.dart' show AppColors;
 import 'package:financial_app_project/commom/constants/app_text_styles.dart' show AppTextStyles;
+import 'package:financial_app_project/commom/widgets/custom_botton_sheet.dart';
 import 'package:financial_app_project/commom/widgets/custom_text_form_field.dart';
 import 'package:financial_app_project/commom/widgets/multi_text_button.dart';
 import 'package:financial_app_project/commom/widgets/password_form_field.dart';
@@ -71,9 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
     if (_controller.state is SignUpErrorState) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text((_controller.state as SignUpErrorState).message)),
-      );
+      customModalBottomSheet(context);
     }
   }
 
@@ -210,11 +209,11 @@ class _SignUpPageState extends State<SignUpPage> {
                      final name = _nameController.text;
                      final email = _emailController.text;
                      final password = _passwordController.text;
-                     _controller.doSignUp(
-                      name: ,
-                       email: ,
-                        password: ,
-                         );
+                     _controller.signUp(
+                       name: name,
+                       email: email,
+                       password: password,
+                     );
                    } else {
                      log("formulario invalido");
                    }
@@ -246,6 +245,5 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void customModalBottonSheet(BuildContext context) {}
 }
 

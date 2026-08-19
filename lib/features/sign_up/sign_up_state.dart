@@ -8,6 +8,6 @@ class SignUpSuccessState extends SignUpState {}
 
 class SignUpErrorState extends SignUpState {
   final String message;
-  SignUpErrorState({this.message = 'Erro ao cadastrar, tente novamente.'});
+  SignUpErrorState({this.message = 'Erro ao cadastrar, tente novamente.'}); //iformation by parameter/constructor
 }
 

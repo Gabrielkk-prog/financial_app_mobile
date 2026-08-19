@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:financial_app_project/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_state.dart';
@@ -18,24 +16,22 @@ class SignUpController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> doSignUp({
+  Future<void> signUp({
     required String name,
     required String email,
     required String password
      }) async {
     _changeState(SignUpLoadingState());
     try {
-     _service.signUp(
+     await _service.signUp(
       name: name,
       email:email,
       password: password
       );
 
       _changeState(SignUpSuccessState());
-      return true;
     } catch (e) {
       _changeState(SignUpErrorState(message: e.toString()));
-      return false;
     }
   } 
 }

@@ -8,6 +8,6 @@ class UserModel {
      this.id,
      this.name,
      this.email,
-     this.password
+     this.password, 
      );
 }

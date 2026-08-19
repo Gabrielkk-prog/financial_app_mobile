@@ -14,15 +14,16 @@ class MockAuthService implements AuthService{
     required String email,
     required String password
      }) async {
+          await Future.delayed(const Duration(seconds: 2));
       try {
-    await Future.delayed(const Duration(seconds: 2));
     if(password.startsWith('123')){
       throw Exception();
     }
      return UserModel(
-      id: email.hashCode,
-      name: name,
-      email: email,
+      email.hashCode,
+      name,
+      email,
+      password,
      );
       } catch(e) {
       if(password.startsWith('123')){
