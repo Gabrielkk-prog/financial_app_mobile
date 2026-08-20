@@ -3,9 +3,12 @@ import 'package:financial_app_project/commom/constants/app_text_styles.dart';
 import 'package:financial_app_project/commom/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
-void customModalBottomSheet(BuildContext context) {
+void customModalBottomSheet(
+  BuildContext context,{
+    required String message,
+  }) {
   showModalBottomSheet<void>(
-    context: context,
+    context: context, 
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(38.0),
@@ -27,12 +30,7 @@ void customModalBottomSheet(BuildContext context) {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                'Ops. Algo deu errado.',
-                style: AppTextStyles.mediumText.copyWith(
-                  color: AppColors.greenlightOne,
-                ),
-              ),
+              Text(message),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 16.0,

@@ -10,6 +10,7 @@ import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_state.dart';
 import 'package:financial_app_project/services/mock_auth_service.dart';
 import 'package:flutter/material.dart';
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -72,7 +73,10 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
     if (_controller.state is SignUpErrorState) {
-      customModalBottomSheet(context);
+      customModalBottomSheet(
+        context,
+        message: SignUpErrorState().message,
+      );
     }
   }
 
