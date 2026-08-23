@@ -1,7 +1,9 @@
 //on this page I configure the onboading settings!
 import 'dart:developer';
 
+import 'package:financial_app_project/commom/constants/routes.dart';
 import 'package:financial_app_project/commom/widgets/primary_button.dart';
+import 'package:financial_app_project/features/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:financial_app_project/commom/constants/app_colors.dart';
 import 'package:financial_app_project/commom/constants/app_text_styles.dart';
@@ -40,9 +42,18 @@ Widget build(BuildContext context) {
             top: 16.0,
             bottom: 4.0,
           ),
+          
+                                   //when you click in the button, 
+                                     //you are trasfered to the 
+                                           //SignUpPage.
           child: PrimaryButton(
             text: 'Get Started',
-            onPressed: () {},
+            onPressed: () {
+               Navigator.pushNamed(
+                context,
+                NamedRoutes.signUp
+              );
+            },
           ),
         ),
         MultiTextButton(

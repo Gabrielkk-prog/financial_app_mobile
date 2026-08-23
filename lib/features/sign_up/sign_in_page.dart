@@ -6,25 +6,26 @@ import 'package:financial_app_project/commom/widgets/custom_text_form_field.dart
 import 'package:financial_app_project/commom/widgets/multi_text_button.dart';
 import 'package:financial_app_project/commom/widgets/password_form_field.dart';
 import 'package:financial_app_project/commom/widgets/primary_button.dart';
+import 'package:financial_app_project/features/sign_up/sign_in_controller.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_state.dart';
 import 'package:financial_app_project/services/mock_auth_service.dart';
 import 'package:flutter/material.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
  
-class _SignUpPageState extends State<SignUpPage> {
+class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _controller = SignUpController(MockAuthService());
+  final _controller = SignInController(MockAuthService());
   bool _isLoadingDialogVisible = false;
 
   @override
@@ -213,7 +214,7 @@ class _SignUpPageState extends State<SignUpPage> {
                      final name = _nameController.text;
                      final email = _emailController.text;
                      final password = _passwordController.text;
-                     _controller.signUp(
+                     _controller.SignIn(
                        name: name,
                        email: email,
                        password: password,

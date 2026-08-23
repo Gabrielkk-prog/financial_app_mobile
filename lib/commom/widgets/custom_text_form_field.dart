@@ -98,14 +98,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
         suffixIcon: widget.suffixIcon,
         floatingLabelBehavior: FloatingLabelBehavior.always, // the text will always float above the text field
-         hintText: widget.hintText ,
+         hintText: widget.hintText,
          labelText: widget.labelText?.toUpperCase(), // text that appears upon the text field when it is empty     
          labelStyle: 
               AppTextStyles.inputLabelText.copyWith(
           color: AppColors.lightGrey),
           focusedBorder: defaultBorder,
           errorBorder: defaultBorder.copyWith(
-            borderSide:  const BorderSide(
+            borderSide: const BorderSide(
               color: AppColors.red,     //the color of the border when the text field is in error state
           ),
           ),

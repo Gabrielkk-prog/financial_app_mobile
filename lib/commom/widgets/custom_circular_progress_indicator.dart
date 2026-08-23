@@ -2,8 +2,8 @@
 import 'package:financial_app_project/commom/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class CustomProgressIndicator extends StatelessWidget {
-  const CustomProgressIndicator({
+class CustomCircularProgressIndicator extends StatelessWidget {
+  const CustomCircularProgressIndicator({
     super.key,
   });
 

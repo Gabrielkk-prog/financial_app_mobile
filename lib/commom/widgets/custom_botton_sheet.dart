@@ -30,7 +30,12 @@ void customModalBottomSheet(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(message),
+              Text(message,
+               textAlign: TextAlign.center,
+                style: AppTextStyles.mediumText20.copyWith(
+                  color: AppColors.greenlightTwo,
+                )
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 16.0,
