@@ -20,16 +20,16 @@ class SignInController extends ChangeNotifier{
     required String email,
     required String password
      }) async {
-    _changeState(SignInStateLoadingState());
+    _changeState(SignInStateLoading());
     try {
      await _service.signIn(
       email:email,
       password: password
       );
 
-      _changeState(SignInStateSuccessState());
+      _changeState(SignInStateSuccess());
     } catch (e) {
-      _changeState(SignInStateErrorState(message: e.toString()));
+      _changeState(SignInStateError(e.toString()));
     }
   } 
 }

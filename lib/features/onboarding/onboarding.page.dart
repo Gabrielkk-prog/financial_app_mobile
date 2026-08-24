@@ -1,8 +1,11 @@
 //on this page I configure the onboading settings!
+// ignore: unused_import
 import 'dart:developer';
 
 import 'package:financial_app_project/commom/constants/routes.dart';
+import 'package:financial_app_project/commom/widgets/multi_text_button.dart';
 import 'package:financial_app_project/commom/widgets/primary_button.dart';
+// ignore: unused_import
 import 'package:financial_app_project/features/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:financial_app_project/commom/constants/app_colors.dart';
@@ -14,94 +17,86 @@ class OnboardingPage extends StatelessWidget {
 
 @override
 Widget build(BuildContext context) {
-  return Scaffold(
+  return Scaffold( 
     backgroundColor: AppColors.iceWhite,
-    body: ListView(                      // ListView is a scrollable list of widgets arranged linearly   
-      children: [      // chlidren organize the widgets in a vertical layout by order of their appearance in the list
-        const SizedBox(height: 48.0),
-         Expanded(
-           child: Image.asset('assets/images/MyImage.png'
-           ),
-         ),
-        Text('Spend Smarter', 
-          textAlign: TextAlign.center,
-          style: AppTextStyles.mediumText.copyWith(
-            color: AppColors.greenlightTwo,
-        ),
-        ),
-        Text ('Save More',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.mediumText.copyWith(
-            color: AppColors.greenlightTwo,
-        ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 32.0,
-            right: 32.0,
-            top: 16.0,
-            bottom: 4.0,
+    body: SafeArea(
+    child: SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 32.0,
+        vertical: 24.0,
+      ),
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 24.0),
+            Center(
+            child: SizedBox(
+              height: 280.0,
+              child: Image.asset(
+                'assets/images/MyImage.png',
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
-          
-                                   //when you click in the button, 
-                                     //you are trasfered to the 
-                                           //SignUpPage.
-          child: PrimaryButton(
+
+          const SizedBox(height: 24.0),
+
+          Text(
+            'Spend Smarter',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.mediumText.copyWith(
+              color: AppColors.greenlightTwo,
+            ),
+          ),
+
+          Text(
+            'Save More',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.mediumText.copyWith(
+              color: AppColors.greenlightTwo,
+            ),
+          ),
+
+          const SizedBox(height: 24.0),
+
+          PrimaryButton(
             text: 'Get Started',
             onPressed: () {
-               Navigator.pushNamed(
+              Navigator.pushNamed(
                 context,
-                NamedRoutes.signUp
+                NamedRoutes.signUp,
               );
             },
           ),
-        ),
-        MultiTextButton(
-          onPressed: ()=> log('tap'),
-          children: [
-          Text(
-            'Already have account? ',
-            style: AppTextStyles.smallText.copyWith(
-              color: AppColors.lightGrey,
-            ),
-          ),
-            Text(
-              'Log In' ,
-              style: AppTextStyles.smallText.copyWith(
-                color: AppColors.greenlightTwo,
+
+          const SizedBox(height: 8.0),
+
+          MultiTextButton(
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                NamedRoutes.signIn,
+              );
+            },
+            children: [
+              Text(
+                'Already have account? ',
+                style: AppTextStyles.smallText.copyWith(
+                  color: AppColors.lightGrey,
+                ),
               ),
+              Text(
+                'Sign In',
+                style: AppTextStyles.smallText.copyWith(
+                  color: AppColors.greenlightTwo,
+                ),
+              ),
+            ],
           ),
         ],
-        ),
-        const SizedBox(
-          height: 24.0),
-      ],
-     ),
-    );
-  }
-}
-
-class MultiTextButton extends StatelessWidget {
-  final List<Text> children;
-  final VoidCallback? onPressed;
-
-  const MultiTextButton({
-    super.key,
-    required this.children,
-    this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-       child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center ,
-        children: children,
-           ),
-          );
-  }
-}
-
+      ),
+    ),
+  ),
+);
+} }
 

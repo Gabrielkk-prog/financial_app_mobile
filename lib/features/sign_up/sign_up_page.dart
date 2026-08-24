@@ -1,11 +1,13 @@
 import 'dart:developer';
 import 'package:financial_app_project/commom/constants/app_colors.dart' show AppColors;
 import 'package:financial_app_project/commom/constants/app_text_styles.dart' show AppTextStyles;
+import 'package:financial_app_project/commom/constants/routes.dart';
 import 'package:financial_app_project/commom/widgets/custom_botton_sheet.dart';
 import 'package:financial_app_project/commom/widgets/custom_text_form_field.dart';
 import 'package:financial_app_project/commom/widgets/multi_text_button.dart';
 import 'package:financial_app_project/commom/widgets/password_form_field.dart';
 import 'package:financial_app_project/commom/widgets/primary_button.dart';
+import 'package:financial_app_project/features/locator.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_state.dart';
 import 'package:financial_app_project/services/mock_auth_service.dart';
@@ -24,7 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _controller = SignUpController(MockAuthService());
+  final _controller = locator.get<SignUpController>(); // '<>'= signing yours metods is a good way to identify your objects.
   bool _isLoadingDialogVisible = false;
 
   @override
@@ -226,7 +228,10 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 12),
               MultiTextButton(
-                onPressed: () => log('tap'),
+                onPressed: () => Navigator.popAndPushNamed(
+                context,
+                NamedRoutes.signIn,
+                ),
                 children: [
                   Text(
                     'Already have account? ',
@@ -235,7 +240,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   Text(
-                    'Log In',
+                    'Sign In',
                     style: AppTextStyles.smallText.copyWith(
                       color: AppColors.greenlightTwo,
                     ),

@@ -14,6 +14,7 @@ class MockAuthService implements AuthService{
     }
      return UserModel(
       email.hashCode,
+      null,
       email,
       password,
      );

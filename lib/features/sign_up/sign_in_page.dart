@@ -1,14 +1,17 @@
 import 'dart:developer';
 import 'package:financial_app_project/commom/constants/app_colors.dart' show AppColors;
 import 'package:financial_app_project/commom/constants/app_text_styles.dart' show AppTextStyles;
+import 'package:financial_app_project/commom/constants/routes.dart';
 import 'package:financial_app_project/commom/widgets/custom_botton_sheet.dart';
 import 'package:financial_app_project/commom/widgets/custom_text_form_field.dart';
 import 'package:financial_app_project/commom/widgets/multi_text_button.dart';
 import 'package:financial_app_project/commom/widgets/password_form_field.dart';
 import 'package:financial_app_project/commom/widgets/primary_button.dart';
+import 'package:financial_app_project/features/locator.dart';
 import 'package:financial_app_project/features/sign_up/sign_in_controller.dart';
+// ignore: unused_import
 import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
-import 'package:financial_app_project/features/sign_up/sign_up_state.dart';
+import 'package:financial_app_project/features/sign_up/sign_in_state.dart';
 import 'package:financial_app_project/services/mock_auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -20,16 +23,15 @@ class SignInPage extends StatefulWidget {
 }
  
 class _SignInPageState extends State<SignInPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();  
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _controller = SignInController(MockAuthService());
+  final _controller = locator.get<SignInController>();
   bool _isLoadingDialogVisible = false;
 
   @override
-  void initState() { //void it's just a behaviour mark(sorry about may poor english)
+  void initState() { 
     super.initState();
     _controller.addListener(_onControllerStateChanged);
   }
@@ -37,7 +39,6 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void dispose() {
     _controller.removeListener(_onControllerStateChanged);
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -50,7 +51,7 @@ class _SignInPageState extends State<SignInPage> {
 
     final state = _controller.state;
 
-    if (state is SignUpLoadingState) {
+    if (state is SignInStateLoading) {
       _showLoadingDialog();
       return;
     }
@@ -60,7 +61,7 @@ class _SignInPageState extends State<SignInPage> {
       _isLoadingDialogVisible = false;
     }
 
-    if (state is SignUpSuccessState) {
+    if (state is SignInStateSuccess) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -73,7 +74,7 @@ class _SignInPageState extends State<SignInPage> {
       );
     }
 
-    if (state is SignUpErrorState) {
+    if (state is SignInStateError) {
       customModalBottomSheet(
         context,
         message: state.message,
@@ -109,24 +110,17 @@ class _SignInPageState extends State<SignInPage> {
             children: [
               const SizedBox(height: 32),
               Text(
-                'Spend Smarter',
+                'Welcome Back!',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.mediumText.copyWith(
                   color: AppColors.greenlightTwo,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                'Save More',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.mediumText.copyWith(
-                  color: AppColors.greenlightTwo,
-                ),
-              ),
               const SizedBox(height: 24),
               Center(
                 child: Image.asset(
-                  'assets/images/form.image.png',
+                  'assets/images/signIn.image.png',
                   height: 160,
                 ),
               ),
@@ -137,18 +131,7 @@ class _SignInPageState extends State<SignInPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
               
-                    CustomTextFormField(
-                      controller: _nameController,
-                      labelText: 'your name',
-                      hintText: 'JOHN DOE',
-                      textCapitalization: TextCapitalization.characters,
-                      validator: (value) {
-                        if (value != null && value.isEmpty) {
-                          return "esse campo nao pode ser vazio";
-                        }
-                        return null;
-                      },
-                    ),
+              
                     CustomTextFormField(
                       controller: _emailController,
                       labelText: 'your email',
@@ -166,7 +149,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     PasswordFormField(
                       controller: _passwordController,
-                      labelText: 'choose your password',
+                      labelText: 'your password',
                       hintText: '********',
                       helperText:
                           'Password must be at least 8 characters, 1 capital letter and 1 number.',
@@ -185,20 +168,6 @@ class _SignInPageState extends State<SignInPage> {
                         }
                         return null;
                       },
-                    ),
-                    PasswordFormField(
-                      controller: _confirmPasswordController,
-                      labelText: "confirm your password",
-                      hintText: "********",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "esse campo nao pode ser vazio";
-                        }
-                        if (value != _passwordController.text) {
-                          return "as senhas não conferem";
-                        }
-                        return null;
-                      },
                     )
                   ],
                 ),
@@ -207,15 +176,13 @@ class _SignInPageState extends State<SignInPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: PrimaryButton(
-                  text: 'Sign Up',
+                  text: 'Sign In',
                   onPressed: (){
                    final valid = _formKey.currentState != null && _formKey.currentState!.validate();
                    if (valid) {
-                     final name = _nameController.text;
                      final email = _emailController.text;
                      final password = _passwordController.text;
-                     _controller.SignIn(
-                       name: name,
+                     _controller.signIn(
                        email: email,
                        password: password,
                      );
@@ -225,18 +192,26 @@ class _SignInPageState extends State<SignInPage> {
                   },
               ),
               ),
+
+              
+                                           //when you tap the button,
+                                                  //you back
+                                             //to the signUp page.
               const SizedBox(height: 12),
               MultiTextButton(
-                onPressed: () => log('tap'),
+                onPressed: () => Navigator.popAndPushNamed(
+                context, 
+                NamedRoutes.signUp,
+                ),
                 children: [
                   Text(
-                    'Already have account? ',
+                    'Dont\'t have account? ',
                     style: AppTextStyles.smallText.copyWith(
                       color: AppColors.lightGrey,
                     ),
                   ),
                   Text(
-                    'Log In',
+                    'Sign Up',
                     style: AppTextStyles.smallText.copyWith(
                       color: AppColors.greenlightTwo,
                     ),
