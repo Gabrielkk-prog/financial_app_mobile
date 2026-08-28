@@ -38,7 +38,7 @@ class MockAuthService implements AuthService{
       throw Exception();
     }
      return UserModel(
-      email.hashCode,
+      id: email.hashCode.toString(),
       name,
       email,
       password,
