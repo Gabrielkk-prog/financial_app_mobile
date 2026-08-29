@@ -7,3 +7,4 @@ Tech stack used:
 - Application reference: Figma.
 - Objective: Finance tracking app. 
 ----------------------------
+*RESOLVI MANTER O SIMULADOR DE SCREEN PARA NO CASO DE VOCES NÃO TEREM UM EMULADOR INSTALADO.*
