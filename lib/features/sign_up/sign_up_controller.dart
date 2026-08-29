@@ -20,16 +20,19 @@ class SignUpController extends ChangeNotifier {
     required String name,
     required String email,
     required String password
-     }) async {
+  }) async {
     _changeState(SignUpLoadingState());
     try {
-     await _service.signUp(
-      name: name,
-      email:email,
-      password: password
+      final user = await _service.signUp(
+        name: name,
+        email: email,
+        password: password,
       );
-
-      _changeState(SignUpSuccessState());
+      if (user.id != null) {
+        _changeState(SignUpSuccessState());
+      } else {
+        throw Exception('Falha ao criar conta');
+      }
     } catch (e) {
       _changeState(SignUpErrorState(message: e.toString()));
     }

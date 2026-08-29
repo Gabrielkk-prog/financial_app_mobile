@@ -4,6 +4,9 @@ import 'package:financial_app_project/commom/constants/app_colors.dart';
 import 'package:financial_app_project/commom/constants/app_text_styles.dart';
 import 'package:financial_app_project/commom/constants/routes.dart';
 import 'package:financial_app_project/commom/widgets/custom_circular_progress_indicator.dart';
+import 'package:financial_app_project/features/locator.dart';
+import 'package:financial_app_project/features/splash/splash_controller.dart';
+import 'package:financial_app_project/features/splash/splash_state.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -14,28 +17,35 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  late SplashController _splashController;
 
   @override
   void initState() {
     super.initState();
-    init();
+    _splashController = locator.get<SplashController>();
+    _splashController.addListener(_onStateChanged);
+    _init();
   }
-                                   //when the app opens, he starts  whith the 
-                                              //splashPage and then 
-                                           //move on to onboardPage.
- 
 
-   Timer init(){                                                                    
-    return Timer(Duration(seconds: 2),      
-     navigateToOnboardig,
-     );
-   }
-  
-  void navigateToOnboardig(){
-    Navigator.pushReplacementNamed(
-      context,
-      NamedRoutes.initial
-    );
+  void _onStateChanged() {
+    if (_splashController.state is SplashStateSucces) {
+      Navigator.pushReplacementNamed(context, NamedRoutes.initial);
+    } else if (_splashController.state is SplashStateError) {
+      Navigator.pushReplacementNamed(context, NamedRoutes.initial);
+    }
+  }
+
+  Timer _init() {
+    return Timer(const Duration(seconds: 2), () {
+      _splashController.isUserLogged();
+    });
+  }
+
+  @override
+  void dispose() {
+    _splashController.removeListener(_onStateChanged);
+    _splashController.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,17 +53,16 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [ 
-            AppColors.greenlightOne,
-            AppColors.greenlightTwo,    // the first two digits are for transparency
-            
-          ],
-        ), 
-      ), 
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.greenlightOne,
+              AppColors.greenlightTwo,
+            ],
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -9,10 +9,7 @@ import 'package:financial_app_project/commom/widgets/password_form_field.dart';
 import 'package:financial_app_project/commom/widgets/primary_button.dart';
 import 'package:financial_app_project/features/locator.dart';
 import 'package:financial_app_project/features/sign_up/sign_in_controller.dart';
-// ignore: unused_import
-import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
 import 'package:financial_app_project/features/sign_up/sign_in_state.dart';
-import 'package:financial_app_project/services/mock_auth_service.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
