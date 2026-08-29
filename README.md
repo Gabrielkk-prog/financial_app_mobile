@@ -4,5 +4,6 @@ This project is still a work in progress, but feel free to explore its technolog
 Tech stack used:
 - Flutter
 - Firebase
-Application reference: Figma.
-Objective: Finance tracking app. 
+- Application reference: Figma.
+- Objective: Finance tracking app. 
+----------------------------
