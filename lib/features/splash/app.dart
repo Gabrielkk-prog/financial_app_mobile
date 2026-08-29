@@ -1,3 +1,4 @@
+import 'package:financial_app_project/features/home/home_page.dart';
 import 'package:financial_app_project/features/onboarding/onboarding.page.dart';
 import 'package:financial_app_project/features/sign_up/sign_in_page.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_page.dart';
@@ -25,6 +26,7 @@ class AppWidget extends StatelessWidget {
         NamedRoutes.splash: (context) => const SplashPage(),
         NamedRoutes.signUp:(context) => const SignUpPage(),
         NamedRoutes.signIn:(context) => const SignInPage(),
+        NamedRoutes.home: (context) => const HomePage(),
       },
     );
   }

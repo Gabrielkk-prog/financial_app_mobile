@@ -1,5 +1,5 @@
-//Here we'd start to use dependences pattenrs to organize our system and make the structure
-//more clean and in another words mare readible.
+                //Here we'd start to use dependences pattenrs to organize our system and make the structure
+                                  //more clean and in another words mare readible.
 import 'package:financial_app_project/features/sign_up/sign_in_controller.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
 import 'package:financial_app_project/features/splash/splash_controller.dart';
@@ -22,6 +22,6 @@ void setup() {
   );
 
   locator.registerFactory<SignUpController>(
-    () => SignUpController(locator.get<AuthService>()),
+    () => SignUpController(locator.get<AuthService>(), const SecureStorage()),
   );
 }

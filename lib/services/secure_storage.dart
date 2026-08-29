@@ -6,15 +6,15 @@ class SecureStorage {
 
   final _secureStorage = const FlutterSecureStorage();
 
-  // save the user data throut the firebase when the user do the signUp.
-  // them move on to de home screen.
+                          // save the user data throut the firebase when the user do the signUp.
+                                             // them move on to de home screen.
   Future<void> write({required String key, required String value}) async {
     await _secureStorage.write(
       key: key,
       value: value,
     );
   }
-
+                                              //Secure metodes definitions
   Future<String?> readOne({required String key}) async {
     return await _secureStorage.read(key: key);
   }
@@ -30,4 +30,5 @@ class SecureStorage {
   Future<void> deleteAll() async {
     await _secureStorage.deleteAll();
   }
-}
+} 
+                                        //now we can use this metods on our projetc.

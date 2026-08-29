@@ -12,4 +12,5 @@ abstract class AuthService {
     required String password,
   
   });
+  Future<void> signOut();
 }

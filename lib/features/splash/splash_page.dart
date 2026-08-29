@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void _onStateChanged() {
     if (_splashController.state is SplashStateSucces) {
-      Navigator.pushReplacementNamed(context, NamedRoutes.initial);
+      Navigator.pushReplacementNamed(context, NamedRoutes.home);
     } else if (_splashController.state is SplashStateError) {
       Navigator.pushReplacementNamed(context, NamedRoutes.initial);
     }
