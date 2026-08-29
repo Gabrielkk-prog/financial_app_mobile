@@ -1,25 +1,41 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "financial_app_project",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "financial_app_project (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "financial_app_project (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter Web - Chrome",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "-d",
+        "chrome"
+      ],
+      "flutterMode": "debug",
+      "console": "web"
+    },
+    {
+      "name": "Flutter Web - Chrome (profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "-d",
+        "chrome"
+      ],
+      "flutterMode": "profile",
+      "console": "web"
+    },
+    {
+      "name": "Flutter Web - Chrome (release)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "-d",
+        "chrome"
+      ],
+      "flutterMode": "release",
+      "console": "web"
+    }
+  ]
 }
