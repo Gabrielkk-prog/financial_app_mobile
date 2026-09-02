@@ -8,6 +8,9 @@ import '../../commom/themes/default_theme.dart';
 import '../../commom/constants/routes.dart';
 
 import 'package:device_preview/device_preview.dart';
+import 'package:financial_app_project/features/profile/profile_page.dart';
+import 'package:financial_app_project/features/stats/stats_page.dart';
+import 'package:financial_app_project/features/stats/wallet/wallet_page.dart';
 
 
 class AppWidget extends StatelessWidget {
@@ -26,7 +29,10 @@ class AppWidget extends StatelessWidget {
         NamedRoutes.splash: (context) => const SplashPage(),
         NamedRoutes.signUp:(context) => const SignUpPage(),
         NamedRoutes.signIn:(context) => const SignInPage(),
-        NamedRoutes.home: (context) => const HomePage(),
+        NamedRoutes.home: (context) => const HomePageView(),
+        NamedRoutes.stats: (context) => const StatsPage(),
+        NamedRoutes.wallet: (context) => const WalletPage(),
+        NamedRoutes.profile: (context) => const ProfilePage(),
       },
     );
   }

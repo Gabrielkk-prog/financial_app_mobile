@@ -17,10 +17,10 @@ class FirebaseAuthService implements AuthService {
       );
       if (result.user != null) {
         return UserModel(
-          result.user!.uid,
-          result.user!.displayName,
-          result.user!.email,
-          password,
+          id:result.user!.uid,
+          name:result.user!.displayName,
+          email:result.user!.email,
+          password: password,
         );
       } else {
         throw Exception('Falha ao fazer login');
@@ -46,10 +46,10 @@ class FirebaseAuthService implements AuthService {
       if (result.user != null) {
         await result.user!.updateDisplayName(name ?? '');
         return UserModel(
-          result.user!.uid,
-          result.user!.displayName,
-          result.user!.email,
-          password,
+          id: result.user!.uid,
+          name:result.user!.displayName,
+          email:result.user!.email,
+
         );
       } else {
         throw Exception('Falha ao criar conta');

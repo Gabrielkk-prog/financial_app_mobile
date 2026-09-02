@@ -24,6 +24,7 @@ class SignUpController extends ChangeNotifier {
     required String email,
     required String password
   }) async {
+    
     _changeState(SignUpLoadingState());
     try {
       final user = await _service.signUp(

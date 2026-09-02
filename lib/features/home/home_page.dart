@@ -3,14 +3,14 @@ import 'package:financial_app_project/services/secure_storage.dart';
 import 'package:flutter/material.dart';
 
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePageView extends StatefulWidget {
+  const HomePageView({super.key});
 
   @override
-  State<HomePage> createState () => _HomePageState();
+  State<HomePageView> createState () => _HomePageViewState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageViewState extends State<HomePageView>{
    final _secureStorage = const SecureStorage();
   @override
   Widget build(BuildContext context) {

@@ -7,12 +7,12 @@ class UserModel {
   final String? email;
   final String? password;
 
-  UserModel(
+  UserModel({
     this.id,
     this.name,
     this.email,
-    this.password,
-  );
+    this.password,     
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -23,14 +23,14 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      map['id'] != null ? map['id'] as String : null,
-      map['name'] != null ? map['name'] as String : null,
-      map['email'] != null ? map['email'] as String : null,
-      map['password'] != null ? map['password'] as String : null,
-    );
-  }
+factory UserModel.fromMap(Map<String, dynamic> map) {
+  return UserModel(
+    id: map['id'] as String?,
+    name: map['name'] as String?,
+    email: map['email'] as String?,
+    password: map['password'] as String?,
+  );
+}
 
   String toJson() => json.encode(toMap());
 
