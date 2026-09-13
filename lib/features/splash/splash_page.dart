@@ -1,13 +1,14 @@
-import 'dart:async';
-
-import 'package:financial_app_project/commom/constants/app_colors.dart';
-import 'package:financial_app_project/commom/constants/app_text_styles.dart';
-import 'package:financial_app_project/commom/constants/routes.dart';
-import 'package:financial_app_project/commom/widgets/custom_circular_progress_indicator.dart';
+import 'package:financial_app_project/common/widgets/custom_botton_sheet.dart';
 import 'package:financial_app_project/features/locator.dart';
-import 'package:financial_app_project/features/splash/splash_controller.dart';
-import 'package:financial_app_project/features/splash/splash_state.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/constants/constants.dart';
+import '../../common/extensions/extensions.dart';
+import '../../common/widgets/widgets.dart';
+
+import '../../services/sync_service/sync_service.dart';
+import 'splash_controller.dart';
+import 'splash_state.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -16,36 +17,69 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
-  late SplashController _splashController;
+class _SplashPageState extends State<SplashPage> with CustomModalSheetMixin {
+  final _splashController = locator.get<SplashController>();
+  final _syncController = locator.get<SyncController>();
 
   @override
   void initState() {
     super.initState();
-    _splashController = locator.get<SplashController>();
-    _splashController.addListener(_onStateChanged);
-    _init();
-  }
 
-  void _onStateChanged() {
-    if (_splashController.state is SplashStateSucces) {
-      Navigator.pushReplacementNamed(context, NamedRoutes.home);
-    } else if (_splashController.state is SplashStateError) {
-      Navigator.pushReplacementNamed(context, NamedRoutes.initial);
-    }
-  }
+    WidgetsBinding.instance.addPostFrameCallback((_) => Sizes.init(context));
 
-  Timer _init() {
-    return Timer(const Duration(seconds: 2), () {
-      _splashController.isUserLogged();
-    });
+    _splashController.isUserLogged();
+    _splashController.addListener(_handleSplashStateChange);
+    _syncController.addListener(_handleSyncStateChange);
   }
 
   @override
   void dispose() {
-    _splashController.removeListener(_onStateChanged);
     _splashController.dispose();
+    _syncController.dispose();
     super.dispose();
+  }
+
+  void _handleSplashStateChange() {
+    if (_splashController.state is AuthenticatedUser) {
+      _syncController.syncFromServer();
+    } else {
+      Navigator.pushReplacementNamed(
+        context,
+        NamedRoute.initial,
+      );
+    }
+  }
+
+  void _handleSyncStateChange() {
+    final state = _syncController.state;
+
+    switch (state.runtimeType) {
+      case DownloadedDataFromServer:
+        _syncController.syncToServer();
+        break;
+      case UploadedDataToServer:
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          NamedRoute.home,
+          (route) => false,
+        );
+        break;
+      case SyncStateError:
+      case UploadDataToServerError:
+      case DownloadDataFromServerError:
+        showCustomModalBottomSheet(
+          context: context,
+          content: (state as SyncStateError).message,
+          buttonText: 'Go to login',
+          isDismissible: false,
+          onPressed: () => Navigator.pushNamedAndRemoveUntil(
+            context,
+            NamedRoute.initial,
+            (route) => false,
+          ),
+        );
+        break;
+    }
   }
 
   @override
@@ -57,10 +91,7 @@ class _SplashPageState extends State<SplashPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColors.greenlightOne,
-              AppColors.greenlightTwo,
-            ],
+            colors: AppColors.greenGradient,
           ),
         ),
         child: Column(
@@ -68,10 +99,13 @@ class _SplashPageState extends State<SplashPage> {
           children: [
             Text(
               'financy',
-              style: AppTextStyles.mediumText.copyWith(
-                color: AppColors.white,
-              ),
+              style: AppTextStyles.bigText50.copyWith(color: AppColors.white),
             ),
+            Text(
+              'Syncing data...',
+              style: AppTextStyles.smallText13.copyWith(color: AppColors.white),
+            ),
+            const SizedBox(height: 16.0),
             const CustomCircularProgressIndicator(),
           ],
         ),

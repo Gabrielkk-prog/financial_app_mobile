@@ -1,5 +1,6 @@
-import 'package:financial_app_project/commom/models/user_model.dart';
-import 'package:financial_app_project/services/auth_service.dart';
+import 'package:financial_app_project/common/models/user_model.dart';
+import 'package:financial_app_project/common/constants/data/data_result.dart';
+import 'package:financial_app_project/services/auth_service/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -29,7 +30,7 @@ group (
     password: 'user@123',
     ),
     ).thenAnswer(
-    (_) async => user,
+    (_) async => DataResult.success(user),
     );
 
     final result = await mockFirebaseAuthService.signUp(
@@ -39,7 +40,7 @@ group (
     );
 
     expect(
-      result,
+      result.data,
       user,
        );
   });

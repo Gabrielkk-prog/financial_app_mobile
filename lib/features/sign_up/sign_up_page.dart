@@ -1,16 +1,21 @@
 import 'dart:developer';
-import 'package:financial_app_project/commom/constants/app_colors.dart' show AppColors;
-import 'package:financial_app_project/commom/constants/app_text_styles.dart' show AppTextStyles;
-import 'package:financial_app_project/commom/constants/routes.dart';
-import 'package:financial_app_project/commom/widgets/custom_botton_sheet.dart';
-import 'package:financial_app_project/commom/widgets/custom_text_form_field.dart';
-import 'package:financial_app_project/commom/widgets/multi_text_button.dart';
-import 'package:financial_app_project/commom/widgets/password_form_field.dart';
-import 'package:financial_app_project/commom/widgets/primary_button.dart';
+
+import 'package:financial_app_project/common/widgets/custom_botton_sheet.dart';
 import 'package:financial_app_project/features/locator.dart';
-import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
-import 'package:financial_app_project/features/sign_up/sign_up_state.dart';
+import 'package:financial_app_project/features/utils/uppercase_text_formatter.dart';
+import 'package:financial_app_project/features/utils/validator.dart';
+import 'package:financial_app_project/services/sync_service/sync_controller.dart';
+import 'package:financial_app_project/services/sync_service/sync_state.dart';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/constants/constants.dart';
+
+import '../../common/widgets/widgets.dart';
+
+import 'sign_up_controller.dart';
+import 'sign_up_state.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -18,235 +23,229 @@ class SignUpPage extends StatefulWidget {
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
- 
-class _SignUpPageState extends State<SignUpPage> {
+
+class _SignUpPageState extends State<SignUpPage> with CustomModalSheetMixin {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _controller = locator.get<SignUpController>(); // '<>'= signing yours metods is a good way to identify your objects.
-  bool _isLoadingDialogVisible = false;
-
-  @override
-  void initState() { //void it's just a behaviour mark(sorry about may poor english)
-    super.initState();
-    _controller.addListener(_onControllerStateChanged);
-  }
+  final _signUpController = locator.get<SignUpController>();
+  final _syncController = locator.get<SyncController>();
 
   @override
   void dispose() {
-    _controller.removeListener(_onControllerStateChanged);
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    _controller.dispose();
+    _signUpController.dispose();
+    _syncController.dispose();
     super.dispose();
   }
 
-  void _onControllerStateChanged() {
-    if (!mounted) return;
+  @override
+  void initState() {
+    super.initState();
+    _signUpController.addListener(_handleSignUpstateChange);
+    _syncController.addListener(_handleSyncStateChange);
+  }
 
-    final state = _controller.state;
-
-    if (state is SignUpLoadingState) {
-      _showLoadingDialog();
-      return;
-    }
-
-    if (_isLoadingDialogVisible) {
-      Navigator.of(context, rootNavigator: true).pop();
-      _isLoadingDialogVisible = false;
-    }
-
-    if (state is SignUpSuccessState) {
-    
-      Navigator.pushReplacementNamed(
-        context,
-        NamedRoutes.home
+  void _handleSignUpstateChange() {
+    final state = _signUpController.state;
+    switch (state.runtimeType) {
+      case SignUpStateLoading:
+        showDialog(
+          context: context,
+          builder: (context) => const CustomCircularProgressIndicator(),
         );
-    }
-
-    if (state is SignUpErrorState) {
-      customModalBottomSheet(
-        context,
-        message: state.message,
-      );
+        break;
+      case SignUpStateSuccess:
+        _syncController.syncFromServer();
+        break;
+      case SignUpStateError:
+        Navigator.pop(context);
+        showCustomModalBottomSheet(
+          context: context,
+          content: (state as SignUpStateError).message,
+          buttonText: "Try again",
+        );
+        break;
     }
   }
 
-  void _showLoadingDialog() {
-    if (_isLoadingDialogVisible) return;
-    _isLoadingDialogVisible = true;
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+  void _handleSyncStateChange() {
+    switch (_syncController.state.runtimeType) {
+      case DownloadedDataFromServer:
+        _syncController.syncToServer();
+        break;
+      case UploadedDataToServer:
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          NamedRoute.home,
+          (route) => false,
+        );
+        break;
+      case SyncStateError:
+      case UploadDataToServerError:
+      case DownloadDataFromServerError:
+        Navigator.pop(context);
+        showCustomModalBottomSheet(
+          context: context,
+          content: (_syncController.state as SyncStateError).message,
+          buttonText: "Try again",
+          onPressed: () => Navigator.pushNamedAndRemoveUntil(
+            context,
+            NamedRoute.signUp,
+            (route) => false,
+          ),
+        );
+        break;
+    }
+  }
+
+  void _onSignUpButtonPressed() {
+    final valid =
+        _formKey.currentState != null && _formKey.currentState!.validate();
+    if (valid) {
+      _signUpController.signUp(
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } else {
+      log("erro ao logar");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            24.0,
-            12.0,
-            24.0,
-            12.0 + MediaQuery.of(context).viewInsets.bottom,
+      body: ListView(
+        key: Keys.signUpListView,
+        children: [
+          Text(
+            'Spend Smarter',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.mediumText36.copyWith(
+              color: AppColors.greenOne,
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 32),
-              Text(
-                'Spend Smarter',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.mediumText.copyWith(
-                  color: AppColors.greenlightTwo,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Save More',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.mediumText.copyWith(
-                  color: AppColors.greenlightTwo,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Center(
-                child: Image.asset(
-                  'assets/images/form.image.png',
-                  height: 160,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-              
-                    CustomTextFormField(
-                      controller: _nameController,
-                      labelText: 'your name',
-                      hintText: 'JOHN DOE',
-                      textCapitalization: TextCapitalization.characters,
-                      validator: (value) {
-                        if (value != null && value.isEmpty) {
-                          return "esse campo nao pode ser vazio";
-                        }
-                        return null;
-                      },
-                    ),
-                    CustomTextFormField(
-                      controller: _emailController,
-                      labelText: 'your email',
-                      hintText: 'john@gmail.com',
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "esse campo nao pode ser vazio";
-                        }
-                        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                          return "email invalido";
-                        }
-                        return null;
-                      },
-                    ),
-                    PasswordFormField(
-                      controller: _passwordController,
-                      labelText: 'choose your password',
-                      hintText: '********',
-                      helperText:
-                          'Password must be at least 8 characters, 1 capital letter and 1 number.',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'esse campo nao pode ser vazio';
-                        }
-                        if (value.length < 8) {
-                          return 'senha deve ter no mínimo 8 caracteres';
-                        }
-                        if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                          return 'senha deve conter pelo menos 1 letra maiúscula';
-                        }
-                        if (!RegExp(r'[0-9]').hasMatch(value)) {
-                          return 'senha deve conter pelo menos 1 número';
-                        }
-                        return null;
-                      },
-                    ),
-                    PasswordFormField(
-                      controller: _confirmPasswordController,
-                      labelText: "confirm your password",
-                      hintText: "********",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "esse campo nao pode ser vazio";
-                        }
-                        if (value != _passwordController.text) {
-                          return "as senhas não conferem";
-                        }
-                        return null;
-                      },
-                    )
+          Text(
+            'Save More',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.mediumText36.copyWith(
+              color: AppColors.greenOne,
+            ),
+          ),
+          Image.asset(
+            'assets/images/sign_up_image.png',
+          ),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                CustomTextFormField(
+                  key: Keys.signUpNameField,
+                  controller: _nameController,
+                  labelText: "your name",
+                  hintText: "JOHN DOE",
+                  inputFormatters: [
+                    UpperCaseTextInputFormatter(),
                   ],
+                  validator: Validator.validateName,
+                ),
+                CustomTextFormField(
+                  key: Keys.signUpEmailField,
+                  controller: _emailController,
+                  labelText: "your email",
+                  hintText: "john@email.com",
+                  validator: Validator.validateEmail,
+                ),
+                PasswordFormField(
+                  key: Keys.signUpPasswordField,
+                  controller: _passwordController,
+                  labelText: "choose your password",
+                  hintText: "*********",
+                  validator: Validator.validatePassword,
+                  helperText:
+                      "Must have at least 8 characters, 1 capital letter and 1 number.",
+                ),
+                PasswordFormField(
+                  key: Keys.signUpConfirmPasswordField,
+                  labelText: "confirm your password",
+                  hintText: "*********",
+                  validator: (value) => Validator.validateConfirmPassword(
+                    _passwordController.text,
+                    value,
+                  ),
+                  onEditingComplete: _onSignUpButtonPressed,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: Text.rich(
+              TextSpan(children: [
+                const TextSpan(text: 'By signing up you comply with our '),
+                TextSpan(
+                  text: 'Agreements',
+                  style: AppTextStyles.smallText13.copyWith(
+                    color: AppColors.darkGrey,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Feedback.forTap(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Agreements(),
+                        ),
+                      );
+                    },
+                ),
+              ]),
+              textAlign: TextAlign.center,
+              style: AppTextStyles.smallText13.copyWith(
+                color: AppColors.grey,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 32.0,
+              right: 32.0,
+              top: 16.0,
+              bottom: 4.0,
+            ),
+            child: PrimaryButton(
+              key: Keys.signUpButton,
+              text: 'Sign Up',
+              onPressed: _onSignUpButtonPressed,
+            ),
+          ),
+          MultiTextButton(
+            key: Keys.signUpAlreadyHaveAccountButton,
+            onPressed: () => Navigator.popAndPushNamed(
+              context,
+              NamedRoute.signIn,
+            ),
+            children: [
+              Text(
+                'Already have account? ',
+                style: AppTextStyles.smallText.copyWith(
+                  color: AppColors.grey,
                 ),
               ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: PrimaryButton(
-                  text: 'Sign Up',
-                  onPressed: (){
-                   final valid = _formKey.currentState != null && _formKey.currentState!.validate();
-                   if (valid) {
-                     final name = _nameController.text;
-                     final email = _emailController.text;
-                     final password = _passwordController.text;
-                     _controller.signUp(
-                       name: name,
-                       email: email,
-                       password: password,
-                     );
-                   } else {
-                     log("formulario invalido");
-                   }
-                  },
-              ),
-              ),
-              const SizedBox(height: 12),
-              MultiTextButton(
-                onPressed: () => Navigator.popAndPushNamed(
-                context,
-                NamedRoutes.signIn,
+              Text(
+                'Sign In ',
+                style: AppTextStyles.smallText.copyWith(
+                  color: AppColors.greenOne,
                 ),
-                children: [
-                  Text(
-                    'Already have account? ',
-                    style: AppTextStyles.smallText.copyWith(
-                      color: AppColors.lightGrey,
-                    ),
-                  ),
-                  Text(
-                    'Sign In',
-                    style: AppTextStyles.smallText.copyWith(
-                      color: AppColors.greenlightTwo,
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
-
 }
-

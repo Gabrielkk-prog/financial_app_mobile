@@ -1,16 +1,21 @@
-import 'package:financial_app_project/services/auth_service.dart';
-import 'package:financial_app_project/services/secure_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:financial_app_project/features/sign_up/sign_up_state.dart';
+import 'package:financial_app_project/services/auth_service/auth_service.dart';
+import 'package:financial_app_project/services/user_data_service/secure_storage.dart';
+import 'package:flutter/foundation.dart';
+
+
+import 'sign_up_state.dart';
 
 class SignUpController extends ChangeNotifier {
-  final AuthService _service;
-  final SecureStorage _secureStorage;
+  SignUpController({
+    required AuthService authService,
+    required SecureStorageService secureStorageService,
+  })  : _secureStorageService = secureStorageService,
+        _authService = authService;
 
-   SignUpController(this._service, [SecureStorage? secureStorage])
-      : _secureStorage = secureStorage ?? const SecureStorage();
+  final AuthService _authService;
+  final SecureStorageService _secureStorageService;
 
-  SignUpState _state = SignUpInitialState();
+  SignUpState _state = SignUpStateInitial();
 
   SignUpState get state => _state;
 
@@ -22,27 +27,37 @@ class SignUpController extends ChangeNotifier {
   Future<void> signUp({
     required String name,
     required String email,
-    required String password
+    required String password,
   }) async {
-    
-    _changeState(SignUpLoadingState());
+    _changeState(SignUpStateLoading());
+
     try {
-      final user = await _service.signUp(
+      final result = await _authService.signUp(
         name: name,
         email: email,
         password: password,
       );
-      if (user.id != null) {
-       await _secureStorage.write(
-        key: "CURRENT_USER", 
-        value: user.toJson(),
-        );
-        _changeState(SignUpSuccessState());
-      } else {
-        throw Exception('Falha ao criar conta');
+
+      final error = result.error;
+      if (error != null) {
+        _changeState(SignUpStateError(error.message));
+        return;
       }
-    } catch (e) {
-      _changeState(SignUpErrorState(message: e.toString()));
+
+      final data = result.data;
+      if (data == null) {
+        _changeState(SignUpStateError('Unable to create user'));
+        return;
+      }
+
+      await _secureStorageService.write(
+        key: "CURRENT_USER",
+        value: data.toJson(),
+      );
+
+      _changeState(SignUpStateSuccess());
+    } catch (error) {
+      _changeState(SignUpStateError(error.toString()));
     }
-  } 
+  }
 }

@@ -1,4 +1,5 @@
-import 'package:financial_app_project/commom/models/user_model.dart';
+import 'package:financial_app_project/common/models/user_model.dart';
+import 'package:financial_app_project/common/constants/data/data_result.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_controller.dart';
 import 'package:financial_app_project/features/sign_up/sign_up_state.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,8 +18,8 @@ void main() {
     mockSecureStorage = MockSecureStorage();
 
     signUpController = SignUpController(
-      mockFirebaseAuthService,
-      mockSecureStorage,
+      authService: mockFirebaseAuthService,
+      secureStorageService: mockSecureStorage,
     );
 
     user = UserModel(
@@ -31,7 +32,7 @@ void main() {
   });
 
   test('deve iniciar em estado inicial', () {
-    expect(signUpController.state, isInstanceOf<SignUpInitialState>());
+    expect(signUpController.state, isInstanceOf<SignUpStateInitial>());
   });
 
   test('deve ir para sucesso ao cadastrar', () async {
@@ -44,7 +45,7 @@ void main() {
       name: 'User',
       email: 'user@email.com',
       password: 'user@123',
-    )).thenAnswer((_) async => user);
+    )).thenAnswer((_) async => DataResult.success(user));
 
     await signUpController.signUp(
       name: 'User',
@@ -52,7 +53,7 @@ void main() {
       password: 'user@123',
     );
 
-    expect(signUpController.state, isInstanceOf<SignUpSuccessState>());
+    expect(signUpController.state, isInstanceOf<SignUpStateSuccess>());
   });
 
   test('deve ir para erro ao falhar no cadastro', () async {
@@ -68,6 +69,6 @@ void main() {
       password: 'user@123',
     );
 
-    expect(signUpController.state, isInstanceOf<SignUpErrorState>());
+    expect(signUpController.state, isInstanceOf<SignUpStateError>());
   });
 }
